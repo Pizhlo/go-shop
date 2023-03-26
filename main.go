@@ -1,17 +1,35 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
+	"database/sql"
+	"github.com/Pizhlo/go-shop/api"
+	db "github.com/Pizhlo/go-shop/db/sqlc"
+	"github.com/Pizhlo/go-shop/util"
+	_ "github.com/lib/pq"
+	"log"
 )
 
-var router *gin.Engine
+func main() {
+	config, err := util.LoadConfig(".")
+	if err != nil {
+		log.Fatal("cannot load config:", err)
+	}
 
-func main() {    
-	router = gin.Default()
-	router.LoadHTMLGlob("templates/*")
+	conn, err := sql.Open(config.DBDriver, config.DBSource)
+	if err != nil {
+		log.Fatal("cannot connect to DB:", err)
+	}
 
-	initializeRoutes()
-	router.Run()
+	store := db.NewStore(conn)
+	server, err := api.NewServer(config, store)
+	if err != nil {
+		log.Fatal("cannot create server:", err)
+	}
+
+	err = server.Start(config.ServerAddress)
+	if err != nil {
+		log.Fatal("cannot start server:", err)
+	}
+	defer conn.Close()
+
 }
-
-
