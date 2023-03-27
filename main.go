@@ -2,11 +2,12 @@ package main
 
 import (
 	"database/sql"
+	"log"
+
 	"github.com/Pizhlo/go-shop/api"
 	db "github.com/Pizhlo/go-shop/db/sqlc"
 	"github.com/Pizhlo/go-shop/util"
 	_ "github.com/lib/pq"
-	"log"
 )
 
 func main() {

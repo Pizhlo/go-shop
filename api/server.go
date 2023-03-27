@@ -1,6 +1,8 @@
 package api
 
 import (
+	"net/http"
+
 	db "github.com/Pizhlo/go-shop/db/sqlc"
 	"github.com/Pizhlo/go-shop/util"
 	"github.com/gin-gonic/gin"
@@ -30,8 +32,15 @@ func (server *Server) setupRouter() {
 
 	router.LoadHTMLGlob("templates/*")
 
-	router.GET("/")
-	router.POST("/users", server.createUser)
+	router.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.html", gin.H{"title": "Main Shop"})
+	})
+	router.GET("/users", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "register.html", gin.H{"title": "Регистрация"})
+	})
+	router.POST("/users", server.createUser, func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.html", gin.H{"title": "Регистрация"})
+	})
 
 	router.Run()
 

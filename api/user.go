@@ -1,17 +1,18 @@
 package api
 
 import (
-	"net/http"
-	db "github.com/Pizhlo/go-shop/db/sqlc"
-	"github.com/lib/pq"
-	"github.com/gin-gonic/gin"
 	"log"
+	"net/http"
+
+	db "github.com/Pizhlo/go-shop/db/sqlc"
+	"github.com/gin-gonic/gin"
+	"github.com/lib/pq"
 )
 
 type CreateUserParams struct {
-	Username       string `json:"username"`
-	Email          string `json:"email"`
-	HashedPassword string `json:"hashed_password"`
+	Username       string `form:"username" binding:"required,alphanum"`
+	Email          string `form:"email" binding:"required,email"`
+	HashedPassword string `form:"hashed_password" binding:"required,min=6"` // TODO implement password -> hashed password
 }
 
 
@@ -27,12 +28,12 @@ func newUserResponse(user db.User) userResponse {
 	}
 }
 
-func (server *Server) createUser(ctx *gin.Context) {
+func (server *Server) createUser(ctx *gin.Context) {	
 	var req CreateUserParams
-	if err := ctx.ShouldBindJSON(&req); err != nil {
+	if err := ctx.ShouldBind(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
-		return
-	}
+		return  
+	}  // TODO сделать отображение ошибок на форме
 
 	arg := db.CreateUserParams{
 		Username: req.Username,
@@ -40,7 +41,7 @@ func (server *Server) createUser(ctx *gin.Context) {
 		HashedPassword: req.HashedPassword,
 	}
 
-	user, err := server.store.CreateUser(ctx, arg)
+	user, err := server.store.CreateUser(ctx, arg) 
 
 	if err != nil {
 		if pqErr, ok := err.(*pq.Error); ok {
@@ -56,5 +57,6 @@ func (server *Server) createUser(ctx *gin.Context) {
 	}
 
 	rsp := newUserResponse(user)
+
 	ctx.JSON(http.StatusOK, rsp)
 }
