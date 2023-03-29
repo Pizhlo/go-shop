@@ -1,12 +1,12 @@
 package api
 
 import (
-	"net/http"
 	"fmt"
 	db "github.com/Pizhlo/go-shop/db/sqlc"
 	"github.com/Pizhlo/go-shop/token"
 	"github.com/Pizhlo/go-shop/util"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 // Server serves HTTP requests for banking service
@@ -38,25 +38,34 @@ func (server *Server) setupRouter() {
 	router := gin.Default()
 
 	router.LoadHTMLGlob("templates/*")
+	router.Static("static/", "./static/")
 
 	router.GET("/", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.html", gin.H{"title": "Main Shop"})
+		c.HTML(http.StatusOK, "index.html", gin.H{"title": "Главная страница"})
+	})
+
+	router.POST("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.html", gin.H{"title": "Главная страница"})
 	})
 
 	router.GET("/users", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "register.html", gin.H{"title": "Регистрация"})
-	})
-	router.POST("/users/login", server.loginUser, func(c *gin.Context) {
-		c.HTML(http.StatusOK, "auth.html", gin.H{"title": "Авторизация"})
 	})
 
 	router.POST("/users", server.createUser, func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", gin.H{"title": "Регистрация"})
 	})
 
+	router.GET("/login", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "auth.html", gin.H{"title": "Авторизация"})
+	})
+	router.POST("/login", server.loginUser, func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.html", gin.H{"title": "Главная страница"})
+	})
+
 	authRoutes := router.Group("/").Use(authMiddleware(server.tokenMaker))
 
-	authRoutes.GET("/accounts/:username", server.getUser, func(c *gin.Context) {
+	authRoutes.GET("/account/:username", server.getUser, func(c *gin.Context) {
 		c.HTML(http.StatusOK, "account.html", gin.H{"title": "Личный кабинет"})
 	})
 

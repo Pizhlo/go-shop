@@ -15,18 +15,22 @@ import (
 )
 
 type CreateUserParams struct {
-	Username string `form:"username" binding:"required,alphanum"`
-	Email    string `form:"email" binding:"required,email"`
-	Password string `form:"password" binding:"required,min=6"` // TODO implement password -> hashed password
+	FirstName string `form:"first_name" binding:"required"`
+	LastName  string `form:"last_name" binding:"required"`
+	Username  string `form:"username" binding:"required,alphanum"`
+	Email     string `form:"email" binding:"required,email"`
+	Password  string `form:"password1" binding:"required,min=6"`
 }
 
 type userResponse struct {
-	Username string `json:"username"`
-	Email    string `json:"email"`
+	Username   string `json:"username"`
+	Email      string `json:"email"`
+	FirstName  string `json:"firstName"`
+	LastName   string `json:"lastName"`
+	Favourites string `json: "favourites"`
 }
 
 func newUserResponse(user db.User) userResponse {
-	fmt.Println("user: ", user)
 	return userResponse{
 		Username: user.Username,
 		Email:    user.Email,
@@ -35,8 +39,9 @@ func newUserResponse(user db.User) userResponse {
 
 func (server *Server) createUser(ctx *gin.Context) {
 	var req CreateUserParams
+	fmt.Println("ctx = ", ctx.Request.PostForm)
 	if err := ctx.ShouldBind(&req); err != nil {
-		ctx.JSON(http.StatusBadRequest, errorResponse(err))
+		ctx.JSON(http.StatusBadRequest, errorResponse(err)) // TODO сделать проверку на то что пароли совпадают
 		return
 	} // TODO сделать отображение ошибок на форме
 
@@ -100,12 +105,12 @@ func (server *Server) getUser(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, account)
+	ctx.JSON(http.StatusOK, account) // TODO Key "authorization" does not exist
 }
 
 type loginUserRequest struct {
-	Username string `json:"username" binding:"required,alphanum"`
-	Password string `json:"password" binding:"required,min=6"`
+	Username string `form:"username" binding:"required,alphanum"`
+	Password string `form:"password" binding:"required,min=6"`
 }
 
 type loginUserResponse struct {
@@ -115,7 +120,7 @@ type loginUserResponse struct {
 
 func (server *Server) loginUser(ctx *gin.Context) {
 	var req loginUserRequest
-	if err := ctx.ShouldBindJSON(&req); err != nil {
+	if err := ctx.ShouldBind(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
