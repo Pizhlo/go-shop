@@ -15,7 +15,7 @@ const (
 	authorizationPayloadKey = "authorization_payload"
 )
 
-func authMiddleware(tokenMaker token.Maker) gin.HandlerFunc {
+func authMiddleware(tokenMaker token.Maker) gin.HandlerFunc { // TODO: use this middleware to check if user is auth
 	return func(ctx *gin.Context) {
 		authorizationHeader := ctx.GetHeader(authorizationHeaderKey)
 		fmt.Println("header:", authorizationHeader)
@@ -46,6 +46,23 @@ func authMiddleware(tokenMaker token.Maker) gin.HandlerFunc {
 		}
 
 		ctx.Set(authorizationPayloadKey, payload)
+		ctx.Set("is_logged_in", true)
+		fmt.Println("-------------authMiddleware--------------")
+		fmt.Println("keys4 = ", ctx.Keys)
 		ctx.Next()
 	}
+}
+
+// This middleware sets whether the user is logged in or not
+func setUserStatus() gin.HandlerFunc {
+	fmt.Println("setUserStatus")
+	return func(c *gin.Context) {
+		if token := c.Keys["token"]; token != "" {
+			c.Set("is_logged_in", true)
+		} else {
+			c.Set("is_logged_in", false)
+		}
+	}
+
+	
 }

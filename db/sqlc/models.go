@@ -5,6 +5,7 @@
 package db
 
 import (
+	"database/sql"
 	"time"
 )
 
@@ -25,18 +26,20 @@ type Order struct {
 }
 
 type Product struct {
-	ID       int32  `json:"id"`
-	Name     string `json:"name"`
-	Category int32  `json:"category"`
-	Photo    []byte `json:"photo"`
-	Price    int32  `json:"price"`
-	Shop     int32  `json:"shop"`
+	ID         int32         `json:"id"`
+	Name       string        `json:"name"`
+	CategoryID int32         `json:"category_id"`
+	Photo      []byte        `json:"photo"`
+	Price      int32         `json:"price"`
+	ShopID     int32         `json:"shop_id"`
+	Raiting    sql.NullInt32 `json:"raiting"`
 }
 
 type Shop struct {
 	ID       int32   `json:"id"`
 	Name     string  `json:"name"`
 	Products []int32 `json:"products"`
+	Owner    int32   `json:"owner"`
 }
 
 type User struct {
@@ -45,4 +48,6 @@ type User struct {
 	Email          string  `json:"email"`
 	HashedPassword string  `json:"hashed_password"`
 	Favourites     []int32 `json:"favourites"`
+	FirstName      string  `json:"first_name"`
+	LastName       string  `json:"last_name"`
 }

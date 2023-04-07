@@ -2,7 +2,7 @@
 
 <!--Embed the header.html template at this location-->
 {{ template "header.html" .}}
-<link rel="stylesheet" href="/static/css/auth.css">
+<link rel="stylesheet" href="/static/css/register.css">
 
 <section class="vh-100 gradient-custom">
     <div class="container py-5 h-100">
@@ -11,21 +11,21 @@
                 <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
                     <div class="card-body p-4 p-md-5">
                         <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Регистрация</h3>
-                        <form action="/users" method="post" name="registerForm">
+                        <form action="/" method="post" name="registerForm">
                             <div class="row">
                                 <div class="col-md-6 mb-4">
 
                                     <div class="form-outline">
-                                        <input type="text" class="form-control form-control-lg" />
-                                        <label class="form-label" name="first_name">Имя</label>
+                                        <input type="text" class="form-control form-control-lg" name="first_name" id="first_name"/>
+                                        <label class="form-label">Имя</label>
                                     </div>
 
                                 </div>
                                 <div class="col-md-6 mb-4">
 
                                     <div class="form-outline">
-                                        <input type="text" class="form-control form-control-lg" />
-                                        <label class="form-label" name="last_name">Фамилия</label>
+                                        <input type="text" class="form-control form-control-lg" name="last_name" id="last_name"/>
+                                        <label class="form-label">Фамилия</label>
                                     </div>
 
                                 </div>
@@ -34,15 +34,15 @@
                             <div class="row">
                                 <div class="col-md-6 mb-4 d-flex align-items-center">
                                     <div class="form-outline datepicker w-100">
-                                        <input type="text" class="form-control form-control-lg" />
+                                        <input type="text" class="form-control form-control-lg" name="username" id="username"/>
                                         <label name="username" class="form-label">Username</label>
                                     </div>
 
                                 </div>
                                 <div class="col-md-6 mb-4">
                                     <div class="form-outline">
-                                        <input type="email" class="form-control form-control-lg" />
-                                        <label class="form-label" name="email">Email</label>
+                                        <input type="email" class="form-control form-control-lg"  name="email" id="email"/>
+                                        <label class="form-label">Email</label>
                                     </div>
                                 </div>
                             </div>
@@ -50,16 +50,16 @@
                             <div class="row">
                                 <div class="col-md-6 mb-4 pb-2">
                                     <div class="form-outline">
-                                        <input type="password" class="form-control form-control-lg" />
-                                        <label class="form-label" name="password1">Пароль</label>
+                                        <input type="password" class="form-control form-control-lg" name="password" id="password"/>
+                                        <label class="form-label">Пароль</label>
                                     </div>
 
                                 </div>
                                 <div class="col-md-6 mb-4 pb-2">
 
                                     <div class="form-outline">
-                                        <input type="password" class="form-control form-control-lg" />
-                                        <label class="form-label" name="password2">Подтвердите пароль</label>
+                                        <input type="password" class="form-control form-control-lg" name="password2" id="password2"/>
+                                        <label class="form-label">Подтвердите пароль</label>
                                     </div>
 
                                 </div>

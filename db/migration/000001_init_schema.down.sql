@@ -1,8 +1,12 @@
-ALTER TABLE IF EXISTS "product" DROP CONSTRAINT IF EXISTS "Product_category_fkey";
+ALTER TABLE IF EXISTS "product" DROP CONSTRAINT IF EXISTS "product_category_fkey";
 
-ALTER TABLE IF EXISTS "product" DROP CONSTRAINT IF EXISTS "Product_shop_fkey";
+ALTER TABLE IF EXISTS "product" DROP CONSTRAINT IF EXISTS "product_shop_fkey";
 
-ALTER TABLE IF EXISTS "orders" DROP CONSTRAINT IF EXISTS "Orders_user_fkey";
+ALTER TABLE IF EXISTS "orders" DROP CONSTRAINT IF EXISTS "orders_user_fkey";
+
+ALTER TABLE IF EXISTS "orders" DROP CONSTRAINT IF EXISTS "orders_user_fkey";
+
+ALTER TABLE IF EXISTS "shop" DROP CONSTRAINT IF EXISTS "shop_owner_fkey";
 
 DROP TABLE IF EXISTS "users";
 DROP TABLE IF EXISTS "product";
